@@ -57,13 +57,14 @@
 </div>
     <div style="width:100%;height:auto;margin:0 auto;text-align:center;max-width:640px;position:fixed;bottom:0;left:0;right:0;">
         <form onsubmit="changeoptions()">
-            <input id="optionsx" type="text" placeholder="Key:Digest(0):BlockSize(0,128,256):Tag" value="123456789:0:0:w" style="padding:15px;margin:0;font-size:16px;font-weight:1000;width:80%;border:0;background-color:transparent;margin-right:0;max-width:600px;height:auto;border:0;margin-right:0;border-bottom:2.5px solid dimgrey;margin:0;padding:16px;color:#949494!important;" autocomplete="off" required><input type="submit" value="❯" style="padding:16px;margin:0;font-size:16px;font-weight:1000;width:5%;border:0;background-color:transparent;margin-left:0;border-bottom:2.5px solid dimgrey;padding:16px;margin:0;color:#949494!important;">
+            <input id="optionsx" type="text" placeholder="Key:Digest(0):BlockSize(0,128,256):Tag" value="123456789:0:0:w" style="padding:15px;margin:0;font-size:16px;font-weight:1000;width:80%;border:0;background-color:transparent;margin-right:0;max-width:600px;height:auto;border:0;margin-right:0;border-bottom:2.5px solid dimgrey;margin:0;padding:16px;color:#949494!important;" autocomplete="off"><input type="submit" value="❯" style="padding:16px;margin:0;font-size:16px;font-weight:1000;width:5%;border:0;background-color:transparent;margin-left:0;border-bottom:2.5px solid dimgrey;padding:16px;margin:0;color:#949494!important;">
         </form><br>
     </div>
 </body>
 </html>
 
 <script>
+    window.sifrelemesorgu = 1;
     window.main_tag = "w";
     window.cache_sifre = "123456789";
     window.cache_sindirme = "0";
@@ -186,6 +187,18 @@ function baglan(url) {
         mesajlar.prepend(yeniMesaj);
     }
 
+    function ai_add_self_message(message,color=null){
+        //Mesaj listesini bulmak
+        var mesajlar = document.getElementById("mesajlar");
+        //Mesaj listesine yeni bir öğe eklemek
+        var yeniMesaj = document.createElement("li");
+        if(color != null) {
+            yeniMesaj.style.color = color;
+        }
+        mesajlar.prepend(yeniMesaj);
+    }
+
+
     //Mesaj göndermek için fonksiyon
     function mesajGonder() {
         event.preventDefault();
@@ -193,10 +206,17 @@ function baglan(url) {
             //Mesaj kutusunu bulmak
             var mesaj = document.getElementById("mesaj");
             //Mesaj kutusundaki metni almak
-            var metin = window.main_tag + "$" + window.cipher.Encrypt(mesaj.value);
-            //Metni sunucuya göndermek
+            if(window.sifrelemesorgu == 1){
+                var metin = window.main_tag + "$" + window.cipher.Encrypt(mesaj.value);
             ws.send(metin);
             add_self_message("You: " + mesaj.value + "\n" + metin,"#dd674a");
+            ai_add_self_message(mesaj.value);
+            }else{
+                var metin = mesaj.value;
+            ws.send(metin);
+            add_self_message("You: " + mesaj.value,"#dd674a");
+            ai_add_self_message(mesaj.value);
+            }
             
             //Mesaj kutusunu temizlemek
             mesaj.value = "";
@@ -208,6 +228,11 @@ function baglan(url) {
         event.preventDefault();
         try {
     var cache000 = document.getElementById("optionsx").value;
+    if(cache000.trim() == ""){
+        window.sifrelemesorgu = 0;
+    }else {
+        window.sifrelemesorgu = 1;
+    }
     if(cache000 == "default" || cache000 == "0" || cache000 == "reset" || cache000 == "restart"){
         window.main_tag = "w";
         window.cache_sifre = "123456789";
