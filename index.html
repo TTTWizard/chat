@@ -159,6 +159,7 @@ function baglan(url) {
         //Mesajı almak
         var mesaj = event.data;
         if(mesaj.indexOf(window.main_tag+"$") == 0){
+            if(window.sifrelemesorgu == 1){
             mesaj = window.cipher.Decrypt(mesaj.substring(window.main_tag.length + 1));
             if(mesaj == "kill"){
             try {
@@ -169,6 +170,7 @@ function baglan(url) {
             }catch(err) {}
         }
         add_self_message(mesaj,"green");
+    }else{add_self_message(mesaj);}
         }else{
             add_self_message(mesaj);
         }
@@ -232,13 +234,15 @@ function baglan(url) {
         window.sifrelemesorgu = 0;
     }else {
         window.sifrelemesorgu = 1;
-    }
-    if(cache000 == "default" || cache000 == "0" || cache000 == "reset" || cache000 == "restart"){
-        window.main_tag = "w";
-        window.cache_sifre = "123456789";
-        window.cache_sindirme = "0";
-        window.cache_block = "0";
-        window.cipher = new SC5(window.cache_sifre,window.cache_sindirme,window.cache_block);
+        if(cache000 == "default" || cache000 == "0" || cache000 == "reset" || cache000 == "restart"){
+            window.main_tag = "w";
+            window.cache_sifre = "123456789";
+            window.cache_sindirme = "0";
+            window.cache_block = "0";
+            window.cipher = new SC5(window.cache_sifre,window.cache_sindirme,window.cache_block);
+        document.getElementById("optionsx").value = "123456789:0:0:w";
+        alert("Successful");
+        return;
     }
     var parcalar = cache000.split(":");
     window.cache_sifre = parcalar[0].trim();
@@ -256,6 +260,7 @@ function baglan(url) {
      }catch(e) {
     }
         window.cipher = new SC5(window.cache_sifre,window.cache_sindirme,window.cache_block);
+    }
         alert("Successful");
     }catch(e){
         alert("Error: " + e);
