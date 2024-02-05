@@ -147,7 +147,6 @@ window.onload = function(e){
             // degerler = base64_decode(degerler);
             // document.getElementById("ws").value = degerler;
             url = degerler;
-            alert(degerler);
             if(url.startsWith("31$")){
                 url = url.slice(3);
                 var block = enc_cipher.Decrypt(url).split("|");
@@ -157,7 +156,7 @@ window.onload = function(e){
                 console.log(wsAAA.value);
                 var cache000 = document.getElementById("optionsx");
                 cache000.value = block[1];
-                changeoptions(true,wsAAA.value);
+                changeoptions(false,wsAAA.value);
             }
 
 
